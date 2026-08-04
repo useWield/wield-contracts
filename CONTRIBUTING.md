@@ -16,7 +16,6 @@ Each repository documents its own setup in its `README.md`. In short:
 | `wield-contracts` | Foundry | `forge test` |
 | `wield-sdk` | Bun | `bun test` |
 | `wield-cli` | Bun | `bun test` |
-| `wield-landing` | Node 20+ / npm | `npm run build` |
 
 ## Pull request checklist
 
