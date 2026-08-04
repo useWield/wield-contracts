@@ -25,6 +25,12 @@ jobs:
       - name: Show Forge version
         run: forge --version
 
+      - name: Install dependencies
+        run: |
+          forge install foundry-rs/forge-std@6e8c4a92c9a8b31c1b0f0c39296d1fa4695c7df8
+          forge install OpenZeppelin/openzeppelin-contracts@69c8def5f222ff96f2b5beff05dfba996368aa79
+          forge install Vectorized/solady@ab96a830e705de13e0f58cfaefadab4ac8257655
+
       - name: Run Forge fmt
         run: forge fmt --check
 

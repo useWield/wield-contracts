@@ -27,11 +27,7 @@ contract MockAggregatorV3 is IAggregatorV3 {
         _updatedAt = t;
     }
 
-    function latestRoundData()
-        external
-        view
-        returns (uint80, int256, uint256, uint256, uint80)
-    {
+    function latestRoundData() external view returns (uint80, int256, uint256, uint256, uint80) {
         return (1, _answer, _updatedAt, _updatedAt, 1);
     }
 }

@@ -17,10 +17,7 @@ contract MockSwapRouter is ISwapRouter {
         rateOutPerIn = r;
     }
 
-    function exactInputSingle(ExactInputSingleParams calldata p)
-        external
-        returns (uint256 amountOut)
-    {
+    function exactInputSingle(ExactInputSingleParams calldata p) external returns (uint256 amountOut) {
         IERC20(p.tokenIn).safeTransferFrom(msg.sender, address(this), p.amountIn);
         amountOut = (p.amountIn * rateOutPerIn) / 1e18;
         require(amountOut >= p.amountOutMinimum, "MockRouter: slippage");

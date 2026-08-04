@@ -18,8 +18,7 @@ contract VaultStockTest is Test {
 
     address owner = address(0xA11CE);
     // Agent signer: derive address from a known private key so tests can vm.sign intents.
-    uint256 constant AGENT_PK =
-        0xA11CE0000000000000000000000000000000000000000000000000000000BEEF;
+    uint256 constant AGENT_PK = 0xA11CE0000000000000000000000000000000000000000000000000000000BEEF;
     address agent;
 
     function setUp() public {
@@ -37,15 +36,9 @@ contract VaultStockTest is Test {
         view
         returns (Vault.Intent memory intent, bytes memory sig)
     {
-        intent = Vault.Intent({
-            nonce: vault.nextNonce(),
-            deadline: uint64(block.timestamp + 3600),
-            allocations: allocs
-        });
+        intent = Vault.Intent({nonce: vault.nextNonce(), deadline: uint64(block.timestamp + 3600), allocations: allocs});
         bytes32 digest = vault.hashIntent(intent);
-        bytes32 ethSigned = keccak256(
-            abi.encodePacked("\x19Ethereum Signed Message:\n32", digest)
-        );
+        bytes32 ethSigned = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", digest));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(AGENT_PK, ethSigned);
         sig = abi.encodePacked(r, s, v);
     }
@@ -54,8 +47,7 @@ contract VaultStockTest is Test {
         vm.prank(owner);
         vault.addStockUnderlying(address(stock), address(feed), 8);
 
-        (Vault.Kind kind, address pf, uint8 fd, bool active) =
-            vault.underlyingInfo(address(stock));
+        (Vault.Kind kind, address pf, uint8 fd, bool active) = vault.underlyingInfo(address(stock));
         assertEq(uint256(kind), uint256(Vault.Kind.STOCK));
         assertEq(pf, address(feed));
         assertEq(fd, 8);

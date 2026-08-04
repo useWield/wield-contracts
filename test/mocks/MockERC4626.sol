@@ -9,10 +9,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 contract MockERC4626 is ERC4626 {
     using SafeERC20 for IERC20;
 
-    constructor(IERC20 asset_, string memory name_, string memory symbol_)
-        ERC20(name_, symbol_)
-        ERC4626(asset_)
-    {}
+    constructor(IERC20 asset_, string memory name_, string memory symbol_) ERC20(name_, symbol_) ERC4626(asset_) {}
 
     /// @dev Test helper: donate underlying to vault to simulate yield accrual.
     function simulateYield(uint256 amount) external {

@@ -60,30 +60,17 @@ contract VaultTest is Test {
         assertEq(usdc.balanceOf(user), 1_000_000e6 - 100e6 + 40e6);
     }
 
-    function _makeIntent(uint16 bps1, uint16 bps2)
-        internal
-        view
-        returns (Vault.Intent memory)
-    {
+    function _makeIntent(uint16 bps1, uint16 bps2) internal view returns (Vault.Intent memory) {
         Vault.Allocation[] memory allocs = new Vault.Allocation[](2);
         allocs[0] = Vault.Allocation({asset: address(under1), bps: bps1});
         allocs[1] = Vault.Allocation({asset: address(under2), bps: bps2});
-        return Vault.Intent({
-            nonce: vault.nextNonce(),
-            deadline: uint64(block.timestamp + 1 hours),
-            allocations: allocs
-        });
+        return
+            Vault.Intent({nonce: vault.nextNonce(), deadline: uint64(block.timestamp + 1 hours), allocations: allocs});
     }
 
-    function _signIntent(Vault.Intent memory intent)
-        internal
-        view
-        returns (bytes memory sig, bytes32 digest)
-    {
+    function _signIntent(Vault.Intent memory intent) internal view returns (bytes memory sig, bytes32 digest) {
         digest = vault.hashIntent(intent);
-        bytes32 ethSigned = keccak256(
-            abi.encodePacked("\x19Ethereum Signed Message:\n32", digest)
-        );
+        bytes32 ethSigned = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", digest));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(agentPk, ethSigned);
         sig = abi.encodePacked(r, s, v);
     }

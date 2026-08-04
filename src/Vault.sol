@@ -46,11 +46,14 @@ contract Vault is ERC4626, Ownable, ReentrancyGuard {
     mapping(address => bool) public isUnderlying;
     address[] public underlyings;
 
-    enum Kind { YIELD, STOCK }
+    enum Kind {
+        YIELD,
+        STOCK
+    }
 
     struct UnderlyingInfo {
-        Kind kind;          // YIELD = ERC-4626 RWA; STOCK = ERC-20 Robinhood stock
-        address priceFeed;  // Chainlink feed (STOCK only; zero for YIELD)
+        Kind kind; // YIELD = ERC-4626 RWA; STOCK = ERC-20 Robinhood stock
+        address priceFeed; // Chainlink feed (STOCK only; zero for YIELD)
         uint8 feedDecimals; // usually 8 (STOCK only)
         bool active;
     }
@@ -114,29 +117,18 @@ contract Vault is ERC4626, Ownable, ReentrancyGuard {
         if (isUnderlying[asset_]) revert AlreadyUnderlying();
         isUnderlying[asset_] = true;
         underlyings.push(asset_);
-        underlyingInfo[asset_] = UnderlyingInfo({
-            kind: Kind.YIELD,
-            priceFeed: address(0),
-            feedDecimals: 0,
-            active: true
-        });
+        underlyingInfo[asset_] =
+            UnderlyingInfo({kind: Kind.YIELD, priceFeed: address(0), feedDecimals: 0, active: true});
         emit UnderlyingAdded(asset_);
     }
 
     /// @notice Register a STOCK underlying (Robinhood tokenized stock, ERC-20 + Chainlink feed).
-    function addStockUnderlying(address token, address priceFeed, uint8 feedDecimals)
-        external
-        onlyOwner
-    {
+    function addStockUnderlying(address token, address priceFeed, uint8 feedDecimals) external onlyOwner {
         if (isUnderlying[token]) revert AlreadyUnderlying();
         isUnderlying[token] = true;
         underlyings.push(token);
-        underlyingInfo[token] = UnderlyingInfo({
-            kind: Kind.STOCK,
-            priceFeed: priceFeed,
-            feedDecimals: feedDecimals,
-            active: true
-        });
+        underlyingInfo[token] =
+            UnderlyingInfo({kind: Kind.STOCK, priceFeed: priceFeed, feedDecimals: feedDecimals, active: true});
         emit StockUnderlyingAdded(token, priceFeed, feedDecimals);
     }
 
@@ -170,22 +162,10 @@ contract Vault is ERC4626, Ownable, ReentrancyGuard {
     function _hashIntent(Intent calldata intent) internal view returns (bytes32) {
         bytes memory packed;
         for (uint256 i = 0; i < intent.allocations.length; i++) {
-            packed = abi.encodePacked(
-                packed,
-                intent.allocations[i].asset,
-                intent.allocations[i].bps
-            );
+            packed = abi.encodePacked(packed, intent.allocations[i].asset, intent.allocations[i].bps);
         }
         bytes32 allocsHash = keccak256(packed);
-        return keccak256(
-            abi.encode(
-                block.chainid,
-                address(this),
-                intent.nonce,
-                intent.deadline,
-                allocsHash
-            )
-        );
+        return keccak256(abi.encode(block.chainid, address(this), intent.nonce, intent.deadline, allocsHash));
     }
 
     function _verify(bytes32 digest, bytes calldata sig) internal view returns (bool) {
@@ -195,11 +175,7 @@ contract Vault is ERC4626, Ownable, ReentrancyGuard {
     }
 
     /// @notice Submit a signed allocation intent. Pulls all funds back, then redeploys per `intent.allocations`.
-    function rebalance(Intent calldata intent, bytes calldata sig)
-        external
-        whenNotPaused
-        nonReentrant
-    {
+    function rebalance(Intent calldata intent, bytes calldata sig) external whenNotPaused nonReentrant {
         if (intent.nonce != nextNonce) revert BadNonce();
         if (block.timestamp > intent.deadline) revert Expired();
 
@@ -253,14 +229,12 @@ contract Vault is ERC4626, Ownable, ReentrancyGuard {
 
         // Expected stock out (18-dec) from oracle price, minus slippage.
         UnderlyingInfo memory info = underlyingInfo[token];
-        (, int256 answer,, uint256 updatedAt,) =
-            IAggregatorV3(info.priceFeed).latestRoundData();
+        (, int256 answer,, uint256 updatedAt,) = IAggregatorV3(info.priceFeed).latestRoundData();
         if (answer <= 0) revert BadOraclePrice();
         if (block.timestamp - updatedAt > oracleStaleAfter) revert StaleOracle();
 
         // usdgAmount (6-dec) -> stock (18-dec): stock = usdg * 1e12 * 10**feedDec / price
-        uint256 expectedStock =
-            (usdgAmount * 1e12 * (10 ** info.feedDecimals)) / uint256(answer);
+        uint256 expectedStock = (usdgAmount * 1e12 * (10 ** info.feedDecimals)) / uint256(answer);
         uint256 minOut = (expectedStock * (TOTAL_BPS - maxSlippageBps)) / TOTAL_BPS;
 
         IERC20(asset()).forceApprove(address(dexRouter), usdgAmount);
@@ -321,8 +295,7 @@ contract Vault is ERC4626, Ownable, ReentrancyGuard {
         uint256 bal = IStockToken(token).balanceOf(address(this));
         if (bal == 0) return 0;
 
-        (, int256 answer,, uint256 updatedAt,) =
-            IAggregatorV3(info.priceFeed).latestRoundData();
+        (, int256 answer,, uint256 updatedAt,) = IAggregatorV3(info.priceFeed).latestRoundData();
         if (answer <= 0) revert BadOraclePrice();
         if (block.timestamp - updatedAt > oracleStaleAfter) revert StaleOracle();
 

@@ -28,11 +28,15 @@ contract BlendManagerTest is Test {
     }
 
     function _two(address a, address b) internal pure returns (address[] memory arr) {
-        arr = new address[](2); arr[0] = a; arr[1] = b;
+        arr = new address[](2);
+        arr[0] = a;
+        arr[1] = b;
     }
 
     function _w(uint16 a, uint16 b) internal pure returns (uint16[] memory w) {
-        w = new uint16[](2); w[0] = a; w[1] = b;
+        w = new uint16[](2);
+        w[0] = a;
+        w[1] = b;
     }
 
     function test_deposit_splits_and_mints_nft() public {
@@ -62,8 +66,10 @@ contract BlendManagerTest is Test {
     }
 
     function test_deposit_reverts_on_bad_input() public {
-        address[] memory one = new address[](1); one[0] = address(basketA);
-        uint16[] memory w1 = new uint16[](1); w1[0] = 9999;
+        address[] memory one = new address[](1);
+        one[0] = address(basketA);
+        uint16[] memory w1 = new uint16[](1);
+        w1[0] = 9999;
         vm.prank(user);
         vm.expectRevert(BlendManager.BadWeights.selector);
         blend.deposit(100e6, one, w1); // sum != 10000

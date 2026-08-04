@@ -14,7 +14,5 @@ interface ISwapRouter {
         uint160 sqrtPriceLimitX96;
     }
 
-    function exactInputSingle(ExactInputSingleParams calldata params)
-        external
-        returns (uint256 amountOut);
+    function exactInputSingle(ExactInputSingleParams calldata params) external returns (uint256 amountOut);
 }

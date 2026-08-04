@@ -42,7 +42,9 @@ contract BlendManager is ERC721, Ownable, ReentrancyGuard {
     event BasketAdded(address indexed vault);
     event BasketRemoved(address indexed vault);
     event PausedSet(bool paused);
-    event Deposited(uint256 indexed tokenId, address indexed owner, uint256 usdgIn, address[] baskets, uint16[] weightsBps);
+    event Deposited(
+        uint256 indexed tokenId, address indexed owner, uint256 usdgIn, address[] baskets, uint16[] weightsBps
+    );
     event Exited(uint256 indexed tokenId, address indexed owner, uint256 usdgOut);
 
     constructor(IERC20 usdg_) ERC721("Wield Basket Position", "wPOS") Ownable(msg.sender) {
