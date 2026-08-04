@@ -47,7 +47,7 @@ contract BlendManagerTest is Test {
         assertEq(vaults.length, 2);
         assertEq(basketA.balanceOf(address(blend)), shares[0]);
         assertEq(basketB.balanceOf(address(blend)), shares[1]);
-        // 60/40 split of 100 USDG; empty mock vault → shares 1:1 with assets
+        // 60/40 split of 100 USDG; empty mock vault - shares 1:1 with assets
         assertEq(basketA.previewRedeem(shares[0]), 60e6);
         assertEq(basketB.previewRedeem(shares[1]), 40e6);
         assertEq(blend.positionValue(tokenId), 100e6);
@@ -57,7 +57,7 @@ contract BlendManagerTest is Test {
     function test_deposit_rounding_remainder_goes_to_last_basket() public {
         vm.prank(user);
         uint256 tokenId = blend.deposit(101, _two(address(basketA), address(basketB)), _w(3333, 6667));
-        // 101*3333/10000 = 33 → last leg gets 101-33 = 68; total preserved
+        // 101*3333/10000 = 33 - last leg gets 101-33 = 68; total preserved
         assertEq(blend.positionValue(tokenId), 101);
         (, uint256[] memory shares) = blend.positionOf(tokenId);
         assertEq(basketA.previewRedeem(shares[0]), 33);

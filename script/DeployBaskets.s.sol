@@ -126,7 +126,7 @@ contract DeployBaskets is Script {
         blend.addBasket(address(core4));
     }
 
-    /// @dev Seed deposit kecil per vault (share ke deployer, dibiarkan selamanya) — anti first-depositor inflation.
+    /// @dev Seed deposit kecil per vault (share ke deployer, dibiarkan selamanya) - anti first-depositor inflation.
     function _seedVaults(IERC20 usdg, address deployer, uint256 seed, Vault bigTech, Vault frontier, Vault core4)
         internal
     {

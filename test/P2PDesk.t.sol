@@ -367,7 +367,7 @@ contract P2PDeskTest is Test {
         bytes memory sig = _sign(o);
         evil.arm(desk, o, sig);
 
-        // Selector spesifik — bukan expectRevert telanjang, supaya test tidak
+        // Selector spesifik - bukan expectRevert telanjang, supaya test tidak
         // lolos karena revert lain yang kebetulan terjadi.
         vm.prank(taker);
         vm.expectRevert(ReentrancyGuard.ReentrancyGuardReentrantCall.selector);

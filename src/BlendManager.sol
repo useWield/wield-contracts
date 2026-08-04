@@ -8,11 +8,11 @@ import {IERC4626} from "@openzeppelin/contracts/interfaces/IERC4626.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-/// @title BlendManager — Wield Baskets position router
+/// @title BlendManager - Wield Baskets position router
 /// @notice Menerima USDG + bobot pilihan user, deposit ke basket vaults (ERC-4626),
 ///         menyimpan share basket, dan mint satu Position NFT per deposit.
 ///         Custodial-of-shares: TIDAK ADA jalur admin ke dana/posisi user.
-///         Blend buy-and-hold — tidak ada rebalance antar-basket.
+///         Blend buy-and-hold - tidak ada rebalance antar-basket.
 contract BlendManager is ERC721, Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 

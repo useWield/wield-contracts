@@ -8,7 +8,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-/// @title P2PDesk — Wield P2P order settlement
+/// @title P2PDesk - Wield P2P order settlement
 /// @notice Maker menandatangani order EIP-712 off-chain (tanpa gas, tanpa mengunci aset);
 ///         taker mengisinya sebagian atau penuh lewat satu transaksi atomik.
 ///         INVARIAN: kontrak ini TIDAK PERNAH memegang aset siapa pun, bahkan sesaat.
@@ -23,7 +23,7 @@ contract P2PDesk is EIP712, Ownable, ReentrancyGuard {
         uint256 sellAmount; // total ditawarkan
         uint256 buyAmount; // total diminta
         uint64 expiry; // unix seconds
-        uint64 nonce; // untuk cancelAllBefore — BUKAN anti-replay
+        uint64 nonce; // untuk cancelAllBefore - BUKAN anti-replay
     }
 
     /// @dev Urutan field WAJIB identik dengan struct di atas dan dengan ORDER_TYPES di web.
@@ -144,7 +144,7 @@ contract P2PDesk is EIP712, Ownable, ReentrancyGuard {
     }
 
     /// @notice Batalkan satu order. Tetap jalan saat paused.
-    /// @dev Menyetel penghitung terisi ke penuh — "dibatalkan" dan "habis terisi"
+    /// @dev Menyetel penghitung terisi ke penuh - "dibatalkan" dan "habis terisi"
     ///      berperilaku identik, jadi cukup satu state.
     function cancelOrder(Order calldata order) external {
         if (msg.sender != order.maker) revert NotMaker();
@@ -154,7 +154,7 @@ contract P2PDesk is EIP712, Ownable, ReentrancyGuard {
     }
 
     /// @notice Batalkan semua order dengan nonce di bawah `newMinNonce`. Tetap jalan saat paused.
-    /// @dev WAJIB monoton naik — kalau tidak, maker bisa menghidupkan kembali order lama
+    /// @dev WAJIB monoton naik - kalau tidak, maker bisa menghidupkan kembali order lama
     ///      yang harganya sudah usang.
     function cancelAllBefore(uint64 newMinNonce) external {
         if (newMinNonce <= minNonce[msg.sender]) revert NonceNotIncreasing();

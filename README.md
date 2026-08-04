@@ -1,6 +1,6 @@
 # Wield Contracts
 
-Solidity contracts for **Wield** — an agent-managed vault protocol for tokenized real-world assets and tokenized equities on **Robinhood Chain**.
+Solidity contracts for **Wield** - an agent-managed vault protocol for tokenized real-world assets and tokenized equities on **Robinhood Chain**.
 
 USDG in, `WIELD` shares out. An off-chain agent proposes allocations; the vault enforces caps, slippage, and oracle freshness on-chain.
 
@@ -30,7 +30,7 @@ USDG in, `WIELD` shares out. An off-chain agent proposes allocations; the vault 
 
 | Contract | Address | Composition |
 |---|---|---|
-| BlendManager | `0x4bc86AC09EeC8dd21557944b21891e08F1295b42` | — |
+| BlendManager | `0x4bc86AC09EeC8dd21557944b21891e08F1295b42` | - |
 | Big Tech basket | `0xfcb4B482C89839e8c19696E3e78223B8985ED923` | AAPL 60% / GOOGL 40% |
 | Frontier basket | `0xb345dafdED457A2544B6ECcF462A41Ea77168eF3` | SPCX 50% / USO 50% |
 | Core 4 basket | `0x66bc68ed37f0dC1b53bb1838beb204b3B42D55B9` | AAPL / GOOGL / SPCX / USO 25% each |
@@ -45,7 +45,7 @@ USDG in, `WIELD` shares out. An off-chain agent proposes allocations; the vault 
 | SPCX | `0x4a0e65a3eccec6dbe60ae065f2e7bb85fae35eea` | `0xB265810950ba6c5C0Ff821c9963014a56fD8Bffb` |
 | HOOD | `0x79D2234Ed4Ee24880835F261DF9A98FcEfC7600e` | no published feed |
 
-> **Multiplier caution.** Robinhood tokenized-equity feeds already return `underlying market price × multiplier`. Integrators must **not** apply the multiplier again. See the [Chainlink docs](https://docs.chain.link/data-feeds/tokenized-equity-feeds/robinhood).
+> **Multiplier caution.** Robinhood tokenized-equity feeds already return `underlying market price - multiplier`. Integrators must **not** apply the multiplier again. See the [Chainlink docs](https://docs.chain.link/data-feeds/tokenized-equity-feeds/robinhood).
 
 DEX router (Uniswap V3 SwapRouter02): `0xCaf681a66D020601342297493863E78C959E5cb2`, pool fee `3000`.
 
@@ -60,7 +60,7 @@ DEX router (Uniswap V3 SwapRouter02): `0xCaf681a66D020601342297493863E78C959E5cb
 
 ### Vault safety model
 
-- **Agent authority is bounded.** The agent signs an `Intent` (nonce, deadline, allocations) hashed with chain ID and vault address. The vault verifies the signature against the registered agent identity — it never lets the agent move funds to arbitrary destinations.
+- **Agent authority is bounded.** The agent signs an `Intent` (nonce, deadline, allocations) hashed with chain ID and vault address. The vault verifies the signature against the registered agent identity - it never lets the agent move funds to arbitrary destinations.
 - **Concentration caps** are enforced on-chain at rebalance time.
 - **Oracle freshness**: `oracleStaleAfter` (deployed at 172800 s / 48 h, because tokenized-equity feeds update on price movement during market hours only).
 - **Slippage**: `maxSlippageBps` (deployed at 100 = 1%).
@@ -123,4 +123,4 @@ CI (`.github/workflows/test.yml`) runs `forge fmt --check`, `forge build --sizes
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).

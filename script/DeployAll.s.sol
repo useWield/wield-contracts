@@ -7,7 +7,7 @@ import {Vault} from "../src/Vault.sol";
 import {MockUSDG} from "../src/MockUSDG.sol";
 import {MockERC4626} from "../test/mocks/MockERC4626.sol";
 
-/// @notice Combined deploy: MockERC4626 x2 â†’ Vault.
+/// @notice Combined deploy: MockERC4626 x2 - Vault.
 /// All output addresses printed for copy-paste into .env and web config.
 contract DeployAll is Script {
     function run() external {
@@ -19,7 +19,7 @@ contract DeployAll is Script {
 
         vm.startBroadcast(pk);
 
-        // â”€â”€ STEP 1: Resolve USDG asset â”€â”€
+        // - STEP 1: Resolve USDG asset -
         address usdg;
         if (bytes(usdgEnv).length == 0) {
             MockUSDG mockUSDG = new MockUSDG();
@@ -29,18 +29,18 @@ contract DeployAll is Script {
             usdg = vm.parseAddress(usdgEnv);
         }
 
-        // â”€â”€ STEP 2: Deploy MockERC4626 vaults (underlyings) â”€â”€
+        // - STEP 2: Deploy MockERC4626 vaults (underlyings) -
         MockERC4626 und1 = new MockERC4626(IERC20(usdg), "Mock RWA Treasury", "mTBILL");
         MockERC4626 und2 = new MockERC4626(IERC20(usdg), "Mock RWA Credit", "mCREDIT");
 
-        // â”€â”€ STEP 3: Deploy Vault â”€â”€
+        // - STEP 3: Deploy Vault -
         Vault vault = new Vault(IERC20(usdg), deployer, agentDid);
         vault.addUnderlying(address(und1));
         vault.addUnderlying(address(und2));
 
         vm.stopBroadcast();
 
-        // â”€â”€ OUTPUT â”€â”€
+        // - OUTPUT -
         console2.log("=== DEPLOYMENT COMPLETE ===");
         console2.log("Chain ID:  ", block.chainid);
         console2.log("Deployer:  ", deployer);

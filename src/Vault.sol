@@ -338,7 +338,7 @@ contract Vault is ERC4626, Ownable, ReentrancyGuard {
     /// @dev Use with `setPaused(true)` for full emergency stop.
     /// @dev Branches by kind. STOCK underlyings are plain ERC-20s with no `redeem()`,
     ///      so treating them as ERC-4626 reverted the whole call and bricked the
-    ///      emergency exit whenever the vault held any stock — including for the
+    ///      emergency exit whenever the vault held any stock - including for the
     ///      YIELD positions that could otherwise have been unwound.
     function emergencyWithdrawAll() external onlyOwner {
         uint256 len = underlyings.length;

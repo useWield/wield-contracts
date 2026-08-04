@@ -34,8 +34,8 @@ inappropriate, threatening, offensive, or harmful.
 
 ## Scope
 
-This Code of Conduct applies within all project spaces — repositories, issues, pull
-requests, discussions — and when an individual is officially representing the project
+This Code of Conduct applies within all project spaces - repositories, issues, pull
+requests, discussions - and when an individual is officially representing the project
 in public spaces.
 
 ## Enforcement
